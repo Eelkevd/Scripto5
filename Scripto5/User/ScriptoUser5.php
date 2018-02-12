@@ -104,6 +104,31 @@
                 $conn->close(); 
         }
         
+         // Get results for search!
+        elseif (isset( $_GET["search"] )){
+            
+                // Create connection
+                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);}   
+                $search_value = $_GET["search"];
+                // Get search results
+                $sql = "SELECT * FROM blogs WHERE titel_blog LIKE '%$search_value%' OR tekst LIKE '%$search_value%'"; 
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) { 
+                     //Output data of each row
+                     while($row = $result->fetch_assoc()) {  
+                     echo "" . $row["titel_blog"]. "\r\n"; 
+                     echo "" . $row["tekst"]. "\r\n\r\n";
+                     }
+                }
+                else {
+                    echo "0 results";
+                }  
+                $conn->close();     
+        }
+        
         // Get all available category names!
         elseif (isset( $_GET["categories"] )){
 
