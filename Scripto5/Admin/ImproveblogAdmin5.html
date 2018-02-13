@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <!-- The overview page of the Scripto blog application -->
+        <!-- The correction page of the Scripto blog application -->
         <title>	Scripto Blog application </title>
         
         <!-- Link to css style file -->
@@ -16,20 +16,18 @@
         </style>   
      </head>
         
-    <script>
-    // Load all blogs automatically while loading the page    
-    getmessages() ; 
-        
-    // Get all the posted blogs from the database to publish on the site
-    function getmessages() {
+    <script>     
+    function getblogtocorrect(){
         var xhr = new XMLHttpRequest();  
-        xhr.open('GET', "http://localhost/Scripto5/Admin/ScriptoAdmin5.php", true); 
+        var correctblog =document.output.verbeterblog.value;   
+        var url = "http://localhost/Scripto5/Admin/ScriptoAdmin5.php?correctblog="+correctblog;    
+        xhr.open('GET', url, true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     // The reponse contains all blogs in the databse with author, 
                     // title and blog and is ordered by descending ID numbers
-                    document.output.outputtext.value =
+                    document.output.correctblogarea.value =
                     xhr.response; 
                     console.log(xhr.response);
                 } 
@@ -42,7 +40,19 @@
               console.error(xhr.statusText);
         };
         xhr.send(null);  
-    }       
+    }   
+        
+    function correctblog(){
+        var xhr = new XMLHttpRequest();  
+        var improvedblog = document.output.correctblogarea.value;
+        var improvedblogtitle = document.output.verbeterblog.value
+        var value = "improvedblog=" + improvedblog + "&improvedblogtitle=" + improvedblogtitle;   
+        xhr.open('POST', "http://localhost/Scripto5/Admin/ScriptoAdmin5.php", true); 
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
+        console.log(value);
+        xhr.send(value);
+        alert("Blog is succesfully improved!")
+    }   
     </script>
     
     <!-- Insert background with clouds -->
@@ -67,15 +77,17 @@
                 <div style="clear:both"></div>  
             </div>
             
-            <!-- Outputbox: All the blogs with author, title & text ordered by descending ID numbers -->
+            <!-- Outputbox: Put in the blog to correct, then submit the changes to update database -->
             <form name="output" action="">  
               <div id="Outputbox">    
                 <div class="column">
-                  <h1>Lees hier de laatste blogs, wellicht van uw hand!</h1>
-                  <textarea name="outputtext" cols="90" rows="20">
+                  <h1>Verbeter je oude blog</h1>
+                  Titel van blog om te verbeteren:  <input name="verbeterblog" placeholder="verbeterblog" type="text" />    
+                  <!-- Button to put old text of blog in textarea -->     
+                  <input type="button" name="getoldblog" onClick="getblogtocorrect()" value="Roep oude blog op" /><br><br>  
+                  <textarea name="correctblogarea" cols="90" rows="20">
                   </textarea><br>
-                <!-- Button to refresh the outputbox to include new posted blogs since page was loaded -->  
-                <input type="button" name="ververs" onClick="getmessages();" value="Ververs blogs" />    
+                  <input type="button" name="sendnewblog" onClick="correctblog()" value="Verstuur verbeterde blog" /><br><br>      
                 </div>
               </div> 
             </form>

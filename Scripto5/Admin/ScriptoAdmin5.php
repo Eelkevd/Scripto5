@@ -1,4 +1,5 @@
 <?php
+
     // Give permission for used request methods
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: *");
@@ -9,35 +10,14 @@
     $blogs_numbers = array();
     $GLOBALS['servername'] = "localhost";
     $GLOBALS['password'] = "";
-    $GLOBALS['dbname'] = "scripto4";
+    $GLOBALS['dbname'] = "scripto5";
     $GLOBALS['username'] = "root";
     
     // Code to delete comments
     if ($verb == 'POST'){
         
-        // Check if there is a category to add to the list
-        if (isset( $_POST["mycategory"] )){
-               
-                $newcategory = $_POST["mycategory"];
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-            
-                // Add category to category database
-                $sql = "INSERT INTO categories (category)".
-                    "VALUES ('$newcategory')";
-                    // Check of a new entry in database has been created
-                    if ($conn->query($sql) === TRUE) {
-                        echo "New record created successfully";} 
-                    else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;} 
-                $conn->close();           
-        }
-        
         // Check if there is a comment_id to remove comment
-        elseif (isset( $_POST["comment_id"] )){
+        if (isset( $_POST["comment_id"] )){
             
                 $comment_id = $_POST["comment_id"];
                 // Create connection
@@ -45,7 +25,6 @@
                 // Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);}
-            
                 // Delete comment from comment database
                 $sql = "DELETE FROM comments WHERE comment_id = '$comment_id'";
            
@@ -155,6 +134,29 @@
                 $conn->close(); 
         }
         
+        // Check if there is an improved blog
+        elseif (isset( $_POST["improvedblog"] )){
+            
+                $postimprovedblog = $_POST["improvedblog"];
+                $postimprovedblogtitle = $_POST["improvedblogtitle"];
+                $improvedblog = str_replace("'", "''", "$postimprovedblog");
+                $improvedblogtitle = str_replace("'", "''", "$postimprovedblogtitle");
+                // Create connection
+                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);}
+                // Update blog in database
+                $sql = "UPDATE blogs SET tekst= '$improvedblog' WHERE titel_blog= '$improvedblogtitle'";
+                // Check of a new entry in database has been created
+                if ($conn->query($sql) === TRUE) {
+                    echo "New record created successfully";} 
+                else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;}
+                $conn->close(); 
+        }
+                
+        
         // Check if there is a comment to put in the database
         elseif (isset( $_POST["mycomment"] )){
             
@@ -260,6 +262,30 @@
                      //Output data of each row
                      while($row = $result->fetch_assoc()) {  
                      echo "" . $row["titel_blog"]. "\r\n"; 
+                     echo "" . $row["tekst"]. "\r\n\r\n";
+                     }
+                }
+                else {
+                    echo "0 results";
+                }  
+                $conn->close();     
+        }
+        
+                // Get results for search!
+        elseif (isset( $_GET["correctblog"] )){
+            
+                // Create connection
+                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);}   
+                $correctblog = $_GET["correctblog"];
+                // Get search results
+                $sql = "SELECT tekst FROM blogs WHERE titel_blog = '$correctblog'"; 
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) { 
+                     //Output data of each row
+                     while($row = $result->fetch_assoc()) {  
                      echo "" . $row["tekst"]. "\r\n\r\n";
                      }
                 }
