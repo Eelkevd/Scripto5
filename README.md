@@ -10,7 +10,7 @@ An additional version to the previous Scripto blog application of last week (See
 
 ### Workflow
 
-## Look for the latest online demo at: http://wijzijncodegorilla.nl/jorik/Scripto4/
+## Look for the latest online demo at: http://wijzijncodegorilla.nl/jorik/Scripto5/
 
 ## Userstories
 The Userstories of the CodeGorilla assignment for week 3 (in Dutch):
@@ -55,6 +55,9 @@ The Userstories of the CodeGorilla assignment for week 5 (in Dutch):
 - W4-003
 - W4-004
 - W4-005 (Note: Title can be put in hard code to be blocked permanently or in the user interface to be blocked for the length of the session)
+
+- W5-001
+- W5-003
 
 ### WORK IN PROGRESS
 
