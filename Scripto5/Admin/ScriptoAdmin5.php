@@ -1,393 +1,195 @@
 <?php
-
-    // Give permission for used request methods
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: *");
-
-    $verb = $_SERVER['REQUEST_METHOD'];
-
-    //Global variable
-    $blogs_numbers = array();
-    $GLOBALS['servername'] = "localhost";
-    $GLOBALS['password'] = "";
-    $GLOBALS['dbname'] = "scripto5";
-    $GLOBALS['username'] = "root";
-    
-    // Code to delete comments
-    if ($verb == 'POST'){
-        
-        // Check if there is a comment_id to remove comment
-        if (isset( $_POST["comment_id"] )){
-            
-                $comment_id = $_POST["comment_id"];
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Delete comment from comment database
-                $sql = "DELETE FROM comments WHERE comment_id = '$comment_id'";
-           
-                // Check if comment has been deleted
-                if ($conn->query($sql) === TRUE) {
-                    echo "Record deleted successfully";
-                } else {
-                    echo "Error deleting record: " . $conn->error;
-                } 
-            $conn->close();   
-        }
-
-        // Check if there is a blog to put in the database
-        elseif (isset( $_POST["myblog"] )){
-            
-                $posttext = $_POST["myblog"];
-                $posttitle = $_POST["title"];
-                $postauthor = $_POST["author"];
-                $postcategory = $_POST["category"];
-                $postextracategory = $_POST["extracategory"];
-                $category_number = "";
-                $blog_number = "";
-                
-                // Translation to make blogs with ' in the text possible
-                $text = str_replace("'", "''", "$posttext");
-                $title = str_replace("'", "''", "$posttitle");
-                $author = str_replace("'", "''", "$postauthor");
-                $category = str_replace("'", "''", "$postcategory");
-                $extracategory = str_replace("'", "''", "$postextracategory");
-            
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                    
-                // Insert blog into blog database
-                $sql = "INSERT INTO blogs (titel_blog, auteur, tekst)".
-                "VALUES ('$title', '$author', '$text')";
-                // Check of a new entry in database has been created
-                if ($conn->query($sql) === TRUE) {
-                    echo "New record created successfully";} 
-                else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}
-                    
-                // Insert category if category is absent in category database
-                $sql = "SELECT category FROM categories WHERE category = '$category'";
-                $result = $conn->query($sql);
-                if ($result->num_rows == 0) {    
-                    $sql = "INSERT INTO categories (category)".
-                    "VALUES ('$category')";
-                    // Check of a new entry in database has been created
-                    if ($conn->query($sql) === TRUE) {
-                        echo "New record created successfully";} 
-                    else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;} 
-                }
-                $conn->close();      
-                
-                 // Create new connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                    
-                // Link blog database to category database in special table
-                // Get category_id
-                $sql = "SELECT category_id FROM categories WHERE category = '$category'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    $category_number = $row['category_id'];}
-                }
-            
-                // Get category_id extra category
-                $sql = "SELECT category_id FROM categories WHERE category = '$extracategory'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    $extracategory_number = $row['category_id'];}
-                }
-            
-                // Get blog_id
-                $sql = "SELECT blog_id FROM blogs WHERE tekst = '$text'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    $blog_number = $row['blog_id'];}
-                }
-            
-                // Link both
-                $sql = "INSERT INTO articles_categories (blog_id, category_id)".
-                "VALUES ('$blog_number','$category_number')";
-                if ($conn->query($sql) === TRUE) {
-                    echo "New record created successfully";} 
-                else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}       
-            
-                // Link second/extra category and blog
-                while($category_number != $extracategory_number){
-                $sql = "INSERT INTO articles_categories (blog_id, category_id)".
-                "VALUES ('$blog_number','$extracategory_number')";
-                if ($conn->query($sql) === TRUE) {
-                    echo "New record created successfully";} 
-                else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}}
-                $conn->close(); 
-        }
-        
-        // Check if there is an improved blog
-        elseif (isset( $_POST["improvedblog"] )){
-            
-                $postimprovedblog = $_POST["improvedblog"];
-                $postimprovedblogtitle = $_POST["improvedblogtitle"];
-                $improvedblog = str_replace("'", "''", "$postimprovedblog");
-                $improvedblogtitle = str_replace("'", "''", "$postimprovedblogtitle");
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Update blog in database
-                $sql = "UPDATE blogs SET tekst= '$improvedblog' WHERE titel_blog= '$improvedblogtitle'";
-                // Check of a new entry in database has been created
-                if ($conn->query($sql) === TRUE) {
-                    echo "New record created successfully";} 
-                else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}
-                $conn->close(); 
-        }
-                
-        
-        // Check if there is a comment to put in the database
-        elseif (isset( $_POST["mycomment"] )){
-            
-                $posttext = $_POST["mycomment"];
-                $posttitle = $_POST["titel_blog"];
-                
-                // Translation to make blogs with ' in the text possible
-                $text = str_replace("'", "''", "$posttext");
-                $title = str_replace("'", "''", "$posttitle");
-            
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                    
-                // Insert blog into blog database
-                $sql = "INSERT INTO comments (comment, titel_blog)".
-                "VALUES ('$text', '$title')";
-                // Check of a new entry in database has been created
-                if ($conn->query($sql) === TRUE) {
-                    echo "New record created successfully";} 
-                else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}
-                    
-                $conn->close(); 
-        }
-        else {
-                die("Error: the required parameters are missing.");    
-        }
-    }
-    
-    // Code to put blogs from the database to the webpage
-    if ($verb == 'GET'){
-        
-        // Get blogs from certain category!
-        if (isset( $_GET["category"] )){
-
-                $category = $_GET["category"];
-            
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-            
-                // Get category_id
-                $sql = "SELECT category_id FROM categories WHERE category = '$category'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    $category_number = $row['category_id'];
-                    //echo "Category_number: " . $row["category_id"]. "\r\n";
-                    }
-                }
-                // Get blog_id's
-                $sql = "SELECT blog_id FROM articles_categories WHERE category_id = '$category_number' ORDER BY blog_id DESC";
-                $result = $conn->query($sql);
-                //print_r($result);
-                if ($result->num_rows > 0) { 
-                    //print_r($result);
-                    while($row = $result->fetch_assoc()) {
-                    //echo "Blog_id: " . $row["blog_id"]. "\r\n" ;    
-                    //echo "Blog_number: " . $row["blog_id"]. "\r\n";  
-                    $blog_number = $row['blog_id'];  
-                    //$blogs_numbers = array();
-                    array_push($blogs_numbers, "$blog_number");
-                    }
-                }    
-
-                // Get blogs with the blog_id's based on the category_id  
-                $length = count($blogs_numbers);
-                //print_r($blogs_numbers);
-                for ($i = 0; $i < $length; $i++) {        
-                    $sql = "SELECT blog_id, tekst, auteur, titel_blog FROM blogs WHERE blog_id= '$blogs_numbers[$i]' ORDER BY blog_id DESC";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                            //Output data of each row
-                            while($row = $result->fetch_assoc()) {
-                               echo "\r\n Auteur: " . $row["auteur"]. "\r\n";
-                               echo "Titel: " . $row["titel_blog"]. "\r\n"; 
-                               echo "Categorie: " .$category. "\r\n" ;
-                               echo "Blog: " . $row["tekst"]. "\r\n" ;
-                            }
-                     }
-                }    
-                $conn->close(); 
-        }
-        
-         // Get results for search!
-        elseif (isset( $_GET["search"] )){
-            
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}   
-                $search_value = $_GET["search"];
-                // Get search results
-                $sql = "SELECT * FROM blogs WHERE titel_blog LIKE '%$search_value%' OR tekst LIKE '%$search_value%'"; 
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                     //Output data of each row
-                     while($row = $result->fetch_assoc()) {  
-                     echo "" . $row["titel_blog"]. "\r\n"; 
-                     echo "" . $row["tekst"]. "\r\n\r\n";
-                     }
-                }
-                else {
-                    echo "0 results";
-                }  
-                $conn->close();     
-        }
-        
-                // Get results for search!
-        elseif (isset( $_GET["correctblog"] )){
-            
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}   
-                $correctblog = $_GET["correctblog"];
-                // Get search results
-                $sql = "SELECT tekst FROM blogs WHERE titel_blog = '$correctblog'"; 
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                     //Output data of each row
-                     while($row = $result->fetch_assoc()) {  
-                     echo "" . $row["tekst"]. "\r\n\r\n";
-                     }
-                }
-                else {
-                    echo "0 results";
-                }  
-                $conn->close();     
-        }
-        
-        // Get all available category names!
-        elseif (isset( $_GET["categories"] )){
-
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get categories
-                $sql = "SELECT category FROM categories";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    echo "" . $row["category"]. "  " ;
-                    }   
-                }
-                else {
-                    echo "0 results";
-                }  
-                $conn->close(); 
-        }
-        
-        // Check if there is a blog titel selection in the request: 
-        // get comments for certain blog!
-        elseif (isset( $_GET["titel_blog"] )){
- 
-                $titel_blog = $_GET["titel_blog"];
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get category_id
-                $sql = "SELECT comment, comment_id FROM comments WHERE titel_blog = '$titel_blog'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    echo "Comment_ID: " . $row["comment_id"]. "\r\n"; 
-                    echo "Comment: " . $row["comment"]. "\r\n" ;
-                    }
-                }
-                else {
-                    echo "0 results";
-                }
-                $conn->close();
-        }
-        
-        // Check if there is the all_blogs keyword in the request: 
-        // get comments for certain blog!
-        elseif (isset( $_GET["all_blogs"] )){
-                
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get category_id
-                $sql = "SELECT titel_blog FROM blogs";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    echo "Titel blog: " . $row["titel_blog"]. " , "; 
-                    }
-                }
-                else {
-                    echo "0 results";
-                }
-                $conn->close();
-        }
-        
-        // No category selection in the request: get all blogs!
-        else {    
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                $sql = "SELECT blog_id, tekst, auteur, titel_blog FROM blogs ORDER BY blog_id DESC";
-                $result = $conn->query($sql);
-                //print_r($result);
-                if ($result->num_rows > 0) {
-                    // Output data of each row
-                    while($row = $result->fetch_assoc()) {  
-                        echo "\r\n Auteur: " . $row["auteur"]. "\r\n";
-                        echo "Titel: " . $row["titel_blog"]. "\r\n"; 
-                        echo "Blog: " . $row["tekst"]. "\r\n" ;
-                    }
-                } 
-                else {
-                    echo "0 results";
-                }
-                $conn->close();
-        }
-    }
-    
+// Check if session is not registered, redirect back to main page.
+// Put this code in first line of web page.
+session_start();
+if (!isset( $_SESSION['username'] ) ){
+header("location:index.html");
+}
 ?>
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <!-- The writing a blog page of the Scripto blog application -->
+        <title>	Scripto Blog application </title>
+        
+        <!-- Link to css style file -->
+        <link type="text/css" rel="stylesheet" href="ScriptoAdmin5.css" />
+	    <meta charset="utf-8">    
+     </head>
+        
+    <script>       
+    // Add category to category list WORK IN PROGRESS
+    function submitcategory() {
+        var newcategory = document.bloginput.nieuwcategorie.value; 
+        var xhr = new XMLHttpRequest();  
+        var value = "mycategory=" + newcategory;
+        xhr.open('POST', "http://localhost/Scripto5/Admin/Scripto5API.php", true); 
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
+        console.log(value);
+        xhr.send(value);           
+    }
+        
+    // Get array of all available categories  WORK IN PROGRESS
+    function getcategories() {
+        var xhr = new XMLHttpRequest(); 
+        var categories = "categories";
+        var url = "http://localhost/Scripto5/Admin/Scripto5API.php?categories=" +categories;
+        xhr.open('GET', url, true); 
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // The reponse contains all blogs in the databse with author, 
+                    // title and blog and is ordered by descending ID numbers
+                    var allcategories = xhr.response;
+                    //return allcategories;
+                    //var allcat = allcategories.split("  ");
+                    //document.bloginput.text.value =
+                    //xhr.response; 
+                    console.log(xhr.response);
+                    console.log(allcategories);} 
+                else {
+                    console.error(xhr.statusText);}}
+        }; 
+        xhr.onerror = function (e) {
+              console.error(xhr.statusText);
+        };
+        xhr.send(null);   
+    }    
+        
+    // Send written blog message to database 
+    function submitmessage() {
+        var author = document.bloginput.author.value; 
+        var title = document.bloginput.title.value;  
+        var blog = document.bloginput.text.value;  
+        var category = document.bloginput.categories.value; 
+        var extracategory = document.bloginput.extracategories.value;
+        var xhr = new XMLHttpRequest();  
+        var value = "myblog=" + blog + "&author=" + author + "&title=" + title + "&category=" + category + "&extracategory=" + extracategory;
+        xhr.open('POST', "http://localhost/Scripto5/Admin/Scripto5API.php", true); 
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
+        console.log(value);
+        xhr.send(value);
+        alert("Blog is succesfully published!")
+    }
+        
+    // Make autocomplete text epander possible
+    // self defined shortcuts list    
+    shortcuts = {
+        "ivm" : "in verband met",
+        "tov" : "ten opzichte van",
+        "muv" : "met uitzondering van", 
+        "cg"  : "CodeGorilla",
+        "gn"  : "Groningen",
+        "ioc" : "Internationaal Olympisch Comité",
+        "jan" : "januari",
+        "feb" : "februari",
+        "mrt" : "maart",
+        "apr" : "april",
+        "jun" : "juni",
+        "jul" : "juli",
+        "aug" : "augustus",
+        "sep" : "september",
+        "okt" : "oktober",
+        "nov" : "november",
+        "dec" : "december"   
+    }
+        
+    // Couple input textarea with shortcuts
+    window.onload = function() {
+        var ta = document.getElementById("text");
+        var timer = 0;
+        var re = new RegExp("\\b(" + Object.keys(shortcuts).join("|") + ")\\b", "g");
+
+        update = function() {
+            ta.value = ta.value.replace(re, function($0, $1) {
+            return shortcuts[$1.toLowerCase()];
+            });
+        }
+        // Text checked for shortcuts per time interval
+        ta.onkeydown = function() {
+        clearTimeout(timer);
+        timer = setTimeout(update, 200);
+        }
+    }           
+    </script>  
+    
+    <!-- Insert background with clouds -->
+    <body background="achtergrond.jpg"> 
+      <!--Build-up of submit page -->
+      <div id="Total">
+        <div id="Menu">
+            <div id="Welcome">
+                <!-- Name and slogan of the blog app -->
+                <p class="welcome"> <b> Scripto: jouw blog applicatie, jouw geschriften! </b></p>
+                <div style="clear:both"></div>
+            </div>   
+            
+            <!-- Navigation bar links -->
+            <div class="topnav">
+                <a href="IndexAdmin5.php">Blogs</a>
+                <a href="CategoryAdmin5.php">Categorieën</a>
+                <a href="ScriptoAdmin5.php">Schrijf zelf!</a>
+                <a href="CommentAdmin5.php">Commentaar</a>
+                <a href="SearchAdmin5.php">Zoek blog</a>
+                <a href="ImproveblogAdmin5.php">Verbeter blog</a>
+                <a href="logout.php">Log uit</a>
+                <div style="clear:both"></div>  
+            </div>    
+            
+            <!-- Inputbox: Your written blog with author, title, category & text-->
+            <div id="Inputbox"> <br> 
+              <h1>Schrijf hier je blog!</h1>    
+              <form name="bloginput" action="" method="post">
+                Auteur: <input type="text" name="author"><br><br>
+                Titel: <input type="text" name="title"><br><br>
+                Categorie:     
+                <select id="categories">
+                <option style="display:none;" value="" selected disabled hidden>Kies categorie</option>
+                </select>
+                <script>   
+                var select = document.getElementById("categories");  
+                select.options[select.options.length] = new Option('vurige verhalen', 'vuur');
+                select.options[select.options.length] = new Option('kabbelende verhalen', 'water');
+                select.options[select.options.length] = new Option('aardige verhalen', 'aarde');
+                select.options[select.options.length] = new Option('luchtige verhalen', 'lucht');
+                select.options[select.options.length] = new Option('Informatie over de blog', 'Bloginfo');
+                </script> 
+                <br><br>    
+                Extra categorie: 
+                <!--<input type="text" name="extracategorie"><br><br> -->
+                <select id="extracategories">
+                <option style="display:none;" value="" selected disabled hidden>Kies 2de categorie</option> 
+                </select>  
+                <script>   
+                var select = document.getElementById("extracategories");
+                select.options[select.options.length] = new Option('vurige verhalen', 'vuur');
+                select.options[select.options.length] = new Option('kabbelende verhalen', 'water');
+                select.options[select.options.length] = new Option('aardige verhalen', 'aarde');
+                select.options[select.options.length] = new Option('luchtige verhalen', 'lucht');
+                select.options[select.options.length] = new Option('Informatie over de blog', 'Bloginfo');
+                </script> 
+                <br><br>      
+                  
+                <!-- WORK IN PROGRESS
+                //getcategories();   
+                //console.log(allcategories);
+                //var allcat = allcategories.split("  "); 
+                //for(index in allcat){
+                //     select.options[select.options.length] = new Option(allcat[index], index);
+                //} -->   
+             
+                <!-- WORK IN PROGRESS  
+                Zelf categorie aanmaken: <input type="text" name="nieuwcategorie">
+                <input type="button" name="categorietoevoegen" onClick="submitcategory();" value="Voeg categorie toe aan lijst" /><br><br> -->  
+  
+                Tekst: <textarea id="text" name="text" rows="20" cols="90"></textarea>
+                <!-- Button to submit the new written blog to the database -->
+                <input type="button" name="publiceer" onClick="submitmessage();" value="Publiceer" /><br><br>  
+              </form>
+            </div> 
+        </div>
+      </div>       
+    </body>
+</html>
