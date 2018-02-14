@@ -6,7 +6,7 @@
         <title>	Scripto Blog application </title>
         
         <!-- Link to css style file -->
-        <link type="text/css" rel="stylesheet" href="IndexAdmin5.css" />
+        <link type="text/css" rel="stylesheet" href="IndexUser5.css" />
 	    <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
@@ -20,7 +20,7 @@
         function getsearchresults() {
         var xhr = new XMLHttpRequest();  
         var search =document.output.zoekwoord.value;   
-        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php?search="+search;    
+        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/User/ScriptoUserAPI5.php?search="+search;    
         xhr.open('GET', url, true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
@@ -56,12 +56,10 @@
 
             <!-- Navigation bar links -->
             <div class="topnav">
-                <a href="IndexAdmin5.html">Blogs</a>
-                <a href="CategoryAdmin5.html">Categorieën</a>
-                <a href="ScriptoAdmin5.html">Schrijf zelf!</a>
-                <a href="CommentAdmin5.html">Commentaar</a>
-                <a href="SearchAdmin5.html">Zoek blog</a>
-                <a href="ImproveblogAdmin5.html">Verbeter blog</a>
+                 <a href="IndexUser5.html">Blogs</a>
+                <a href="CategoryUser5.html">Categorieën</a>
+                <a href="index.html">Commentaar</a>
+                <a href="SearchUser5.html">Zoek blog</a>
                 <div style="clear:both"></div>  
             </div>
             

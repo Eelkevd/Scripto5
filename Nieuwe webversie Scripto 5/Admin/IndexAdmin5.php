@@ -1,3 +1,12 @@
+<?php
+// Check if session is not registered, redirect back to main page.
+// Put this code in first line of web page.
+session_start();
+if (!isset( $_SESSION['username'] ) ){
+header("location:index.html");
+}
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -6,7 +15,7 @@
         <title>	Scripto Blog application </title>
         
         <!-- Link to css style file -->
-        <link type="text/css" rel="stylesheet" href="IndexUser5.css" />
+        <link type="text/css" rel="stylesheet" href="IndexAdmin5.css" />
 	    <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
@@ -23,7 +32,7 @@
     // Get all the posted blogs from the database to publish on the site
     function getmessages() {
         var xhr = new XMLHttpRequest();  
-        xhr.open('GET', "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoUser5.php", true); 
+        xhr.open('GET', "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php", true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -58,10 +67,13 @@
 
             <!-- Navigation bar links -->
             <div class="topnav">
-                <a href="IndexUser5.html">Blogs</a>
-                <a href="CategoryUser5.html">Categorieën</a>
-                <a href="CommentUser5.html">Commentaar</a>
-                <a href="SearchUser5.html">Zoek blog</a>
+                <a href="IndexAdmin5.php">Blogs</a>
+                <a href="CategoryAdmin5.php">Categorieën</a>
+                <a href="ScriptoAdmin5.php">Schrijf zelf!</a>
+                <a href="CommentAdmin5.php">Commentaar</a>
+                <a href="SearchAdmin5.php">Zoek blog</a>
+                <a href="ImproveblogAdmin5.php">Verbeter blog</a>
+                <a href="logout.php">Log uit</a>
                 <div style="clear:both"></div>  
             </div>
             

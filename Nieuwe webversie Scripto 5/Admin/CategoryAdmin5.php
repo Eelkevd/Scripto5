@@ -1,3 +1,12 @@
+<?php
+// Check if session is not registered, redirect back to main page.
+// Put this code in first line of web page.
+session_start();
+if (!isset( $_SESSION['username'] ) ){
+header("location:index.html");
+}
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -6,7 +15,7 @@
         <title>	Scripto Blog application </title>
         
         <!-- Link to css style file -->
-        <link type="text/css" rel="stylesheet" href="IndexUser5.css" />
+        <link type="text/css" rel="stylesheet" href="IndexAdmin5.css" />
 	    <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
@@ -29,7 +38,7 @@
         var xhr = new XMLHttpRequest();     
         var cat = input;
         console.log(cat);
-        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoUser5.php?category="+cat;
+        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php?category="+cat;
         xhr.open('GET', url, true);
         xhr.onload = function (e) {
             if (xhr.readyState === xhr.DONE) {
@@ -64,10 +73,13 @@
             </div>     
             <!-- Navigation bar links -->
             <div class="topnav">
-                <a href="IndexUser5.html">Blogs</a>
-                <a href="CategoryUser5.html">Categorieën</a>
-                <a href="CommentUser5.html">Commentaar</a>
-                <a href="SearchUser5.html">Zoek blog</a>
+                <a href="IndexAdmin5.php">Blogs</a>
+                <a href="CategoryAdmin5.php">Categorieën</a>
+                <a href="ScriptoAdmin5.php">Schrijf zelf!</a>
+                <a href="CommentAdmin5.php">Commentaar</a>
+                <a href="SearchAdmin5.php">Zoek blog</a>
+                <a href="ImproveblogAdmin5.php">Verbeter blog</a>
+                <a href="logout.php">Log uit</a>
                 <div style="clear:both"></div>  
             </div>
             <!-- Outputbox: All the blogs of the chosen category with author, title & text ordered by descending ID numbers -->

@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <!-- The search page of the Scripto blog application -->
+        <!-- The overview page of the Scripto blog application -->
         <title>	Scripto Blog application </title>
         
         <!-- Link to css style file -->
@@ -16,12 +16,14 @@
         </style>   
      </head>
         
-    <script>     
-        function getsearchresults() {
+    <script>
+    // Load all blogs automatically while loading the page    
+    getmessages() ; 
+        
+    // Get all the posted blogs from the database to publish on the site
+    function getmessages() {
         var xhr = new XMLHttpRequest();  
-        var search =document.output.zoekwoord.value;   
-        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoUser5.php?search="+search;    
-        xhr.open('GET', url, true); 
+        xhr.open('GET', "http://wijzijncodegorilla.nl/jorik/Scripto5/User/ScriptoUserAPI5.php", true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -40,7 +42,7 @@
               console.error(xhr.statusText);
         };
         xhr.send(null);  
-    }     
+    }       
     </script>
     
     <!-- Insert background with clouds -->
@@ -56,23 +58,22 @@
 
             <!-- Navigation bar links -->
             <div class="topnav">
-                 <a href="IndexUser5.html">Blogs</a>
+                <a href="IndexUser5.html">Blogs</a>
                 <a href="CategoryUser5.html">Categorieën</a>
-                <a href="CommentUser5.html">Commentaar</a>
+                <a href="index.html">Commentaar</a>
                 <a href="SearchUser5.html">Zoek blog</a>
                 <div style="clear:both"></div>  
             </div>
             
-            <!-- Outputbox: All the blogs with author, title & text ordered by descending ID numbers found with a certain search input -->
+            <!-- Outputbox: All the blogs with author, title & text ordered by descending ID numbers -->
             <form name="output" action="">  
               <div id="Outputbox">    
                 <div class="column">
-                  <h1>Zoek je blogs per zoekwoord(en)</h1>
-                  Zoekwoord:  <input name="zoekwoord" placeholder="zoekwoord" type="text" />    
-                  <!-- Button to search into database -->     
-                  <input type="button" name="search" onClick="getsearchresults()" value="Zoek blog" /><br><br>  
+                  <h1>Lees hier de laatste blogs, wellicht van uw hand!</h1>
                   <textarea name="outputtext" cols="90" rows="20">
                   </textarea><br>
+                <!-- Button to refresh the outputbox to include new posted blogs since page was loaded -->  
+                <input type="button" name="ververs" onClick="getmessages();" value="Ververs blogs" />    
                 </div>
               </div> 
             </form>

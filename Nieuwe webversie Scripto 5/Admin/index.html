@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- The inlog page for the admin section of the Scripto blog application -->
+        <title>	Scripto Blog application </title>
+        
+        <!-- Link to css style file -->
+        <link type="text/css" rel="stylesheet" href="ScriptoAdmin5.css" />
+	    <meta charset="utf-8">    
+     </head>
+    
+    <!-- Insert background with clouds -->
+    <body background="achtergrond.jpg"> 
+      <!--Build-up of submit page -->
+      <div id="Total">
+        <div id="Menu">
+            <div id="Welcome">
+                <!-- Name and slogan of the blog app -->
+                <p class="welcome"> <b> Scripto: jouw blog applicatie, jouw geschriften! </b></p>
+                <div style="clear:both"></div>
+            </div> 
+            <table width="300" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC">
+                <tr>
+                <form name="form1" method="post" action="checklogin.php">
+                <td>
+                <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#CCCCCC">
+                        <tr>
+                        <td colspan="3">Login als admin!</td>
+                        </tr>
+                    <tr>
+                        <td width="78">Username</td>
+                        <td width="6">:</td>
+                        <td width="294"><input name="myusername" type="text" id="myusername"></td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>:</td>
+                        <td><input name="mypassword" type="text" id="mypassword"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><input type="submit" name="Submit" value="Login"></td>
+                    </tr>
+                </table>
+                </td>
+                </form>
+                </tr>
+            </table>
+        </div>
+        </div>  
+    </body>
+</html>

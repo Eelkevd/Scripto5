@@ -57,7 +57,10 @@ The Userstories of the CodeGorilla assignment for week 5 (in Dutch):
 - W4-005 (Note: Title can be put in hard code to be blocked permanently or in the user interface to be blocked for the length of the session)
 
 - W5-001
+- W5-002
 - W5-003
+- W5-004
+
 
 ### WORK IN PROGRESS
 

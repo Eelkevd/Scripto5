@@ -1,3 +1,12 @@
+<?php
+// Check if session is not registered, redirect back to main page.
+// Put this code in first line of web page.
+session_start();
+if (!isset( $_SESSION['username'] ) ){
+header("location:index.html");
+}
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -16,7 +25,7 @@
         var newcategory = document.bloginput.nieuwcategorie.value; 
         var xhr = new XMLHttpRequest();  
         var value = "mycategory=" + newcategory;
-        xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php", true); 
+        xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php", true); 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
         console.log(value);
         xhr.send(value);           
@@ -26,7 +35,7 @@
     function getcategories() {
         var xhr = new XMLHttpRequest(); 
         var categories = "categories";
-        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php?categories=" +categories;
+        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php?categories=" +categories;
         xhr.open('GET', url, true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
@@ -58,7 +67,7 @@
         var extracategory = document.bloginput.extracategories.value;
         var xhr = new XMLHttpRequest();  
         var value = "myblog=" + blog + "&author=" + author + "&title=" + title + "&category=" + category + "&extracategory=" + extracategory;
-        xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php", true); 
+        xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php", true); 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
         console.log(value);
         xhr.send(value);
@@ -119,12 +128,13 @@
             
             <!-- Navigation bar links -->
             <div class="topnav">
-                <a href="IndexAdmin5.html">Blogs</a>
-                <a href="CategoryAdmin5.html">Categorieën</a>
-                <a href="ScriptoAdmin5.html">Schrijf zelf!</a>
-                <a href="CommentAdmin5.html">Commentaar</a>
-                <a href="SearchAdmin5.html">Zoek blog</a>
-                <a href="ImproveblogAdmin5.html">Verbeter blog</a>
+                <a href="IndexAdmin5.php">Blogs</a>
+                <a href="CategoryAdmin5.php">Categorieën</a>
+                <a href="ScriptoAdmin5.php">Schrijf zelf!</a>
+                <a href="CommentAdmin5.php">Commentaar</a>
+                <a href="SearchAdmin5.php">Zoek blog</a>
+                <a href="ImproveblogAdmin5.php">Verbeter blog</a>
+                <a href="logout.php">Log uit</a>
                 <div style="clear:both"></div>  
             </div>    
             

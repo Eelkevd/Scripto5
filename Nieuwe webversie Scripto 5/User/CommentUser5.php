@@ -1,3 +1,12 @@
+<?php
+// Check if session is not registered, redirect back to main page.
+// Put this code in first line of web page.
+session_start();
+if (!isset( $_SESSION['username'] ) ){
+header("location:index.html");
+}
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -8,7 +17,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         
         <!-- Link to css style file -->
-        <link type="text/css" rel="stylesheet" href="CommentAdmin5.css" />
+        <link type="text/css" rel="stylesheet" href="CommentUser5.css" />
 	    <meta charset="utf-8">  
      </head>
         
@@ -33,32 +42,22 @@
         //}
         else{
             var xhr = new XMLHttpRequest();  
-            var value = "mycomment=" + comment + "&titel_blog=" + titel_blog;
-            xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php", true); 
+            var username = "<?php echo $_SESSION['username'] ?>";
+            var value = "mycomment=" + comment + "&titel_blog=" + titel_blog + "&username=" + username;
+            xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/User/ScriptoUserAPI5.php", true); 
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
             console.log(value);
             xhr.send(value); 
             alert("Comment is succesfully published!")
         }
-    }
-        
-    // Delete single comment of comment_id
-    function deletecomment() {
-        var comment_id = document.output.comment_id.value;  
-        var xhr = new XMLHttpRequest();  
-        var value = "comment_id=" +comment_id;
-        xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php", true); 
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
-        console.log(value);
-        xhr.send(value);          
-    }   
+    }  
         
     // Get comments from certain blog from database to publish on site
     function getblogcomments() {
         var xhr = new XMLHttpRequest();     
         var titel_blog = document.output.titelblog.value;
         console.log(titel_blog);
-        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/ScriptoAdmin5.php?titel_blog="+titel_blog;
+        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/User/ScriptoUserAPI5.php?titel_blog="+titel_blog;
         xhr.open('GET', url, true);
         xhr.onload = function (e) {
             if (xhr.readyState === xhr.DONE) {
@@ -134,12 +133,11 @@
 
             <!-- Navigation bar links -->
             <div class="topnav">
-                <a href="IndexAdmin5.html">Blogs</a>
-                <a href="CategoryAdmin5.html">Categorieën</a>
-                <a href="ScriptoAdmin5.html">Schrijf zelf!</a>
-                <a href="CommentAdmin5.html">Commentaar</a>
-                <a href="SearchAdmin5.html">Zoek blog</a>
-                <a href="ImproveblogAdmin5.html">Verbeter blog</a>
+                <a href="IndexUser5.html">Blogs</a>
+                <a href="CategoryUser5.html">Categorieën</a>
+                <a href="CommentUser5.php">Commentaar</a>
+                <a href="SearchUser5.html">Zoek blog</a>
+                <a href="logout.php">Log uit</a>
                 <div style="clear:both"></div>  
             </div>    
             
@@ -168,13 +166,7 @@
                   </textarea>
                 <!-- Button to refresh the outputbox to include new posted blogs since page was loaded --> 
                 <input type="button" name="ververs" onClick="getblogcomments()" value="Ververs comments" /> 
-                <br><br>    
-                ID van te verwijderen comment:  <input name="comment_id" placeholder="id nummer comment" type="text" />    
-                <!-- Button to delete the comment with the selected id -->     
-                <input type="button" name="delete" onClick="deletecomment()" value="Verwijder comment" /><br><br>  
-                Titel van blog om commentaar uit te schakelen:  <input name="blog_titel" placeholder="titel blog" type="text" />    
-                <!-- Button to delete the comment with the selected id -->     
-                <input type="button" name="block" onClick="blockblogtitle()" value="Blokkeer commentaar bij deze blog" /><br><br>      
+                <br><br>       
                 </div>
               </div> 
             </form>    
