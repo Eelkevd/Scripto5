@@ -23,7 +23,7 @@
     // Get all the posted blogs from the database to publish on the site
     function getmessages() {
         var xhr = new XMLHttpRequest();  
-        xhr.open('GET', "http://localhost/Scripto5/User/ScriptoUser5.php", true); 
+        xhr.open('GET', "http://localhost/Scripto5/User/ScriptoUserAPI5.php", true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -60,7 +60,7 @@
             <div class="topnav">
                 <a href="IndexUser5.html">Blogs</a>
                 <a href="CategoryUser5.html">Categorieën</a>
-                <a href="CommentUser5.html">Commentaar</a>
+                <a href="index.html">Commentaar</a>
                 <a href="SearchUser5.html">Zoek blog</a>
                 <div style="clear:both"></div>  
             </div>

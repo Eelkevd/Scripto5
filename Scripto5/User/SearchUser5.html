@@ -20,7 +20,7 @@
         function getsearchresults() {
         var xhr = new XMLHttpRequest();  
         var search =document.output.zoekwoord.value;   
-        var url = "http://localhost/Scripto5/Admin/ScriptoAdmin5.php?search="+search;    
+        var url = "http://localhost/Scripto5/user/ScriptoUserAPI5.php?search="+search;    
         xhr.open('GET', url, true); 
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
@@ -58,7 +58,7 @@
             <div class="topnav">
                  <a href="IndexUser5.html">Blogs</a>
                 <a href="CategoryUser5.html">Categorieën</a>
-                <a href="CommentUser5.html">Commentaar</a>
+                <a href="index.html">Commentaar</a>
                 <a href="SearchUser5.html">Zoek blog</a>
                 <div style="clear:both"></div>  
             </div>
