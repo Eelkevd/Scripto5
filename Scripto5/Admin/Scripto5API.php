@@ -271,7 +271,7 @@
                 $conn->close();     
         }
         
-                // Get results for search!
+        // Get old blog to correct!
         elseif (isset( $_GET["correctblog"] )){
             
                 // Create connection

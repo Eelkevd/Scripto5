@@ -42,7 +42,8 @@ header("location:index.html");
         //}
         else{
             var xhr = new XMLHttpRequest();  
-            var value = "mycomment=" + comment + "&titel_blog=" + titel_blog;
+            var username = "<?php echo $_SESSION['username'] ?>";
+            var value = "mycomment=" + comment + "&titel_blog=" + titel_blog + "&username=" + username;
             xhr.open('POST', "http://localhost/Scripto5/User/ScriptoUserAPI5.php", true); 
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
             console.log(value);
