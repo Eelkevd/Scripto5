@@ -14,8 +14,34 @@
 
     if ($verb == 'POST'){
         
+        //Check if there is a new account to put in database
+        if (isset( $_POST["userid"] )){
+                $postuserid = $_POST["userid"];
+                $postpassword = $_POST["pasw"];
+                
+                // Translation to make blogs with ' in the text possible
+                $userid = str_replace("'", "''", "$postuserid");
+                $pasw = str_replace("'", "''", "$postpassword");
+            
+                // Create connection
+                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);}
+                    
+                // Insert blog into blog database
+                $sql = "INSERT INTO commentlogin (username, password)".
+                "VALUES ('$userid', '$pasw')";
+                // Check of a new entry in database has been created
+                if ($conn->query($sql) === TRUE) {
+                    echo "New record created successfully";} 
+                else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;}
+                $conn->close();     
+        }
+        
         // Check if there is a comment to put in the database
-        if (isset( $_POST["mycomment"] )){
+        elseif (isset( $_POST["mycomment"] )){
             
                 $posttext = $_POST["mycomment"];
                 $posttitle = $_POST["titel_blog"];
@@ -167,8 +193,8 @@
                 if ($result->num_rows > 0) { 
                     while($row = $result->fetch_assoc()) {    
                     echo "Comment_ID: " . $row["comment_id"]. "\r\n"; 
-                    echo "Comment: " . $row["comment"]. "\r\n" ;
                     echo "Username: " . $row["Username"]. "\r\n" ;
+                    echo "Comment: " . $row["comment"]. "\r\n" ;
                     }
                 }
                 else {
