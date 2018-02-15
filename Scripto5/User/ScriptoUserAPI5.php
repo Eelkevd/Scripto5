@@ -43,15 +43,15 @@
         
         // check if there is a new password to replace the old one
         elseif (isset( $_POST["newpasw"] )){
-                $pasw = $POST["newpasw"];
+                $pasw = $_POST["newpasw"];
                 $passw = password_hash($pasw, PASSWORD_DEFAULT);
-                $email = $POST["email"];
+                $email = $_POST["email"];
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);}
-                 $sql = "UPDATE commentlogin SET password= '$passw' WHERE email= '$email'";
+                $sql = "UPDATE commentlogin SET password= '$passw' WHERE email= '$email'";
                 // Check of a new entry in database has been created
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";} 
