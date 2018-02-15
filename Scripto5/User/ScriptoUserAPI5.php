@@ -11,8 +11,7 @@
     $GLOBALS['password'] = "";
     $GLOBALS['dbname'] = "scripto5";
     $GLOBALS['username'] = "root";
-    
-    // Code to delete comments
+
     if ($verb == 'POST'){
         
         // Check if there is a comment to put in the database
@@ -20,12 +19,12 @@
             
                 $posttext = $_POST["mycomment"];
                 $posttitle = $_POST["titel_blog"];
-                $postusername =  $_POST["username"];
+                $postusername = $_POST["username"];
                 
                 // Translation to make blogs with ' in the text possible
                 $text = str_replace("'", "''", "$posttext");
                 $title = str_replace("'", "''", "$posttitle");
-                $username = str_replace("'", "''", "$postusername");
+                $userid = str_replace("'", "''", "$postusername");
             
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
@@ -35,13 +34,12 @@
                     
                 // Insert blog into blog database
                 $sql = "INSERT INTO comments (comment, titel_blog, Username)".
-                "VALUES ('$text', '$title', '$username')";
+                "VALUES ('$text', '$title', '$userid')";
                 // Check of a new entry in database has been created
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";} 
                 else {
                     echo "Error: " . $sql . "<br>" . $conn->error;}
-                    
                 $conn->close(); 
         }
         else {
@@ -180,7 +178,6 @@
         }
         
         // Check if there is the all_blogs keyword in the request: 
-        // get comments for certain blog!
         elseif (isset( $_GET["all_blogs"] )){
                 
                 // Create connection

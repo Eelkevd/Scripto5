@@ -33,7 +33,8 @@ header("location:index.html");
     // Send written comment to database 
     function submitcomment() {
         var comment = document.bloginput.text.value;  
-        var titel_blog= document.bloginput.title.value; 
+        var titel_blog= document.bloginput.title.value;
+        var username = "<?php echo $_SESSION['username'] ?>";
         if ( $.inArray(titel_blog, listofblockedtitles) > -1 ) {
         alert("Not possible to comment on the selected blog");    
         }
@@ -42,7 +43,7 @@ header("location:index.html");
         //}
         else{
             var xhr = new XMLHttpRequest();  
-            var value = "mycomment=" + comment + "&titel_blog=" + titel_blog;
+            var value = "mycomment=" + comment + "&titel_blog=" + titel_blog + "&username=" + username;
             xhr.open('POST', "http://localhost/Scripto5/Admin/Scripto5API.php", true); 
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
             console.log(value);

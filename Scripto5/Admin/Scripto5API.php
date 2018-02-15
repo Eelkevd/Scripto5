@@ -162,26 +162,24 @@
             
                 $posttext = $_POST["mycomment"];
                 $posttitle = $_POST["titel_blog"];
-                
+                $postusername = $_POST["username"];
                 // Translation to make blogs with ' in the text possible
                 $text = str_replace("'", "''", "$posttext");
                 $title = str_replace("'", "''", "$posttitle");
-            
+                $userid = str_replace("'", "''", "$postusername");  
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);}
-                    
                 // Insert blog into blog database
-                $sql = "INSERT INTO comments (comment, titel_blog)".
-                "VALUES ('$text', '$title')";
+                $sql = "INSERT INTO comments (comment, titel_blog, Username)".
+                "VALUES ('$text', '$title', '$userid')";
                 // Check of a new entry in database has been created
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";} 
                 else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}
-                    
+                    echo "Error: " . $sql . "<br>" . $conn->error;}       
                 $conn->close(); 
         }
         else {
@@ -328,12 +326,13 @@
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);}
                 // Get category_id
-                $sql = "SELECT comment, comment_id FROM comments WHERE titel_blog = '$titel_blog'";
+                $sql = "SELECT comment, comment_id, Username FROM comments WHERE titel_blog = '$titel_blog'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) { 
                     while($row = $result->fetch_assoc()) {    
                     echo "Comment_ID: " . $row["comment_id"]. "\r\n"; 
                     echo "Comment: " . $row["comment"]. "\r\n" ;
+                    echo "Username: " . $row["Username"]. "\r\n" ;
                     }
                 }
                 else {
@@ -343,7 +342,6 @@
         }
         
         // Check if there is the all_blogs keyword in the request: 
-        // get comments for certain blog!
         elseif (isset( $_GET["all_blogs"] )){
                 
                 // Create connection
