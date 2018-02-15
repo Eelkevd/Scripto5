@@ -12,7 +12,8 @@ An additional version to the previous Scripto blog application of last week (See
 - monday: reading assignment, W5-001 searchfunction made, found information about login screen, made new database, made new Git repository
 - tuesday: W5-003 able to improve old blog article, first online demo working, php login struggles
 - wednesday: W5-002 create login for admin, new database table, W5-004 create login for user, new database table, second online demo working
-- thursday: W5-005 user able to make new username & password, removed bugs (from online demo)
+- thursday: W5-005 user able to make new username & password, removed bugs (from online demo), W5-006 passwords now encrypted, new online demo version
+- friday
 
 ## Look for the latest online demo at: http://wijzijncodegorilla.nl/jorik/Scripto5/
 
@@ -65,6 +66,7 @@ The Userstories of the CodeGorilla assignment for week 5 (in Dutch):
 - W5-003
 - W5-004
 - W5-005
+- w5-006
 
 
 ### WORK IN PROGRESS
