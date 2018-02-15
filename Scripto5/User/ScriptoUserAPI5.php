@@ -18,20 +18,21 @@
         if (isset( $_POST["userid"] )){
                 $postuserid = $_POST["userid"];
                 $postpassword = $_POST["pasw"];
+                $postemail = $_POST["email"]; 
                 
                 // Translation to make blogs with ' in the text possible
                 $userid = str_replace("'", "''", "$postuserid");
+                $email = str_replace("'", "''", "$postemail");
                 $pasw = str_replace("'", "''", "$postpassword");
                 $passw = password_hash($pasw, PASSWORD_DEFAULT);
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                    
+                    die("Connection failed: " . $conn->connect_error);} 
                 // Insert blog into blog database
-                $sql = "INSERT INTO commentlogin (username, password)".
-                "VALUES ('$userid', '$passw')";
+                $sql = "INSERT INTO commentlogin (username, password, email)".
+                "VALUES ('$userid', '$passw', '$email')";
                 // Check of a new entry in database has been created
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";} 
@@ -39,6 +40,25 @@
                     echo "Error: " . $sql . "<br>" . $conn->error;}
                 $conn->close();     
         }
+        
+        // check if there is a new password to replace the old one
+        elseif (isset( $_POST["newpasw"] )){
+                $pasw = $POST["newpasw"];
+                $passw = password_hash($pasw, PASSWORD_DEFAULT);
+                $email = $POST["email"];
+                // Create connection
+                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);}
+                 $sql = "UPDATE commentlogin SET password= '$passw' WHERE email= '$email'";
+                // Check of a new entry in database has been created
+                if ($conn->query($sql) === TRUE) {
+                    echo "New record created successfully";} 
+                else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;}
+                $conn->close(); 
+        }   
         
         // Check if there is a comment to put in the database
         elseif (isset( $_POST["mycomment"] )){
@@ -157,7 +177,6 @@
         
         // Get all available category names!
         elseif (isset( $_GET["categories"] )){
-
                  // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
@@ -177,10 +196,31 @@
                 $conn->close(); 
         }
         
+        elseif (isset( $_GET["email"] )){
+                $email = $_GET["email"];
+                // Create connection
+                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);}
+                // Get category_id
+                $sql = "SELECT password FROM commentlogin WHERE email = '$email'";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) { 
+                     //Output data of each row
+                     while($row = $result->fetch_assoc()) {  
+                     echo $row["password"];
+                     }
+                }
+                else {
+                    echo "0 results";
+                }  
+                $conn->close();     
+        }
+             
         // Check if there is a blog title selection in the request: 
         // get comments for certain blog!
         elseif (isset( $_GET["titel_blog"] )){
- 
                 $titel_blog = $_GET["titel_blog"];
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);

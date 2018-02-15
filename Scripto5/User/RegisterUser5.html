@@ -14,8 +14,9 @@
     function submitaccount() {
         var userid = document.accountinput.userid.value;  
         var password= document.accountinput.password.value; 
+        var email = document.accountinput.email.value;  
         var xhr = new XMLHttpRequest();  
-        var value = "userid=" + userid + "&pasw=" + password;
+        var value = "userid=" + userid + "&pasw=" + password + "&email=" + email;
         xhr.open('POST', "http://localhost/Scripto5/User/ScriptoUserAPI5.php", true); 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
         console.log(value);
@@ -51,6 +52,7 @@
               <form name="accountinput" action="" method="post">  
                 Jouw nieuwe username: <input type="text" name="userid"><br><br>
                 Jouw nieuwe wachtwoord: <input type="text" name="password"><br><br>
+                Jouw emailadres: <input type="text" name="email"><br><br>
                 <!-- Button to submit the new written blog to the database -->
                 <input type="button" name="registreer" onClick="submitaccount();" value="Registreer je nieuwe account" />
               </form><br><br> 
