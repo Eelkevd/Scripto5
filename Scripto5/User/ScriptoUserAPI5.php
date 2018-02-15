@@ -22,7 +22,7 @@
                 // Translation to make blogs with ' in the text possible
                 $userid = str_replace("'", "''", "$postuserid");
                 $pasw = str_replace("'", "''", "$postpassword");
-            
+                $passw = password_hash($pasw, PASSWORD_DEFAULT);
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
@@ -31,7 +31,7 @@
                     
                 // Insert blog into blog database
                 $sql = "INSERT INTO commentlogin (username, password)".
-                "VALUES ('$userid', '$pasw')";
+                "VALUES ('$userid', '$passw')";
                 // Check of a new entry in database has been created
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";} 
