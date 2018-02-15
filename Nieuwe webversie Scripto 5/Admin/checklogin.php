@@ -1,8 +1,8 @@
 <?php
 $host="localhost"; // Host name
-$username="root"; // Mysql username
-$password=""; // Mysql password
-$db_name="scripto5"; // Database name
+$username="tomklru270_Scripto5user"; // Mysql username
+$password="wachtwoord"; // Mysql password
+$db_name="tomklru270_Scripto5"; // Database name
 $tbl_name="login"; // Table name
 
 // Connect to server and select databse.
