@@ -1,6 +1,5 @@
 <?php
-// Check if session is not registered, redirect back to main page.
-// Put this code in first line of web page.
+// Check if session is not registered, redirect back to login page.
 session_start();
 if (!isset( $_SESSION['username'] ) ){
 header("location:index.html");
@@ -8,14 +7,11 @@ header("location:index.html");
 ?>
 
 <!DOCTYPE html>
-
 <html>
     <head>
         <!-- The comment page of the Scripto blog application -->
         <title>	Scripto Blog application </title>
-    
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        
         <!-- Link to css style file -->
         <link type="text/css" rel="stylesheet" href="CommentUser5.css" />
 	    <meta charset="utf-8">  
@@ -23,8 +19,7 @@ header("location:index.html");
         
     <script>   
     // Global variable
-    var listofblockedtitles = ["Openingsblog"];
-        
+    var listofblockedtitles = ["Openingsblog"];    
     // add title to blockedtitleslist of blogs without comments
     function blockblogtitle(){
         listofblockedtitles.push(document.output.blog_titel.value);    
@@ -37,9 +32,6 @@ header("location:index.html");
         if ( $.inArray(titel_blog, listofblockedtitles) > -1 ) {
         alert("Not possible to comment on the selected blog");    
         }
-        //if(listofblockedtitles.indexOf(titel_blog) > -1){
-        //alert("Not possible to comment on the selected blog");    
-        //}
         else{
             var xhr = new XMLHttpRequest();  
             var username = "<?php echo $_SESSION['username'] ?>";
@@ -62,8 +54,8 @@ header("location:index.html");
         xhr.onload = function (e) {
             if (xhr.readyState === xhr.DONE) {
                 if (xhr.status === 200) {
-                    // The reponse contains all blogs from the input category in the databse 
-                    // with author, title and blog (ordered by descending ID numbers)    
+                    // The reponse contains all comments from the input blog in the databse 
+                    // with comment_id, username and comment (ordered by descending ID numbers)    
                     document.output.outputtext.value =
                     xhr.response;
                     console.log(xhr.responseText);
@@ -106,7 +98,6 @@ header("location:index.html");
         var ta = document.getElementById("text");
         var timer = 0;
         var re = new RegExp("\\b(" + Object.keys(shortcuts).join("|") + ")\\b", "g");
-
         update = function() {
             ta.value = ta.value.replace(re, function($0, $1) {
             return shortcuts[$1.toLowerCase()];
@@ -144,26 +135,20 @@ header("location:index.html");
             <!-- Inputbox: Write your comment with the title of the blog-->
             <div id="Inputbox"> 
              <h1>Schrijf hier je commentaar!</h1>
-              <form name="bloginput" action="" method="post">  
+             <form name="bloginput" action="" method="post">  
                 Titel van bijbehorende blog: <input type="text" name="title"><br><br>
                 Jouw commentaar: <textarea id="text" name="text" rows="5" cols="90"></textarea>
                 <!-- Button to submit the new written blog to the database -->
                 <input type="button" name="publiceer" onClick="submitcomment();" value="Publiceer commentaar" />
-              </form><br><br> 
+             </form><br><br> 
             
             <!-- Outputbox: All the comments linked to a certain blog -->
             <form name="output" action="">  
               <div id="Outputbox">    
                 <div class="column">
                 <h1>Lees hier het laatste commentaar, wellicht van uw hand!</h1>
-                Titel van bijbehorende blog: <input type="titelblog" name="titelblog"><br><br>    
-                <!-- WORK IN PROGRESS
-                Titel van bijbehorende blog:<input name="blog" placeholder="Openingsblog" type="text" list="blogs" />
-                <datalist id="blogs">
-                  <option value="Commentaar">Commentaar</option>
-                </datalist><br><br> -->     
-                  <textarea name="outputtext" cols="90" rows="12">
-                  </textarea>
+                Titel van bijbehorende blog: <input type="titelblog" name="titelblog"><br><br>       
+                <textarea name="outputtext" cols="90" rows="12"></textarea>
                 <!-- Button to refresh the outputbox to include new posted blogs since page was loaded --> 
                 <input type="button" name="ververs" onClick="getblogcomments()" value="Ververs comments" /> 
                 <br><br>       

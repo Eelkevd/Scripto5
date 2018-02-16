@@ -1,6 +1,5 @@
 <?php
-// Check if session is not registered, redirect back to main page.
-// Put this code in first line of web page.
+// Check if session is not registered, redirect back to login page.
 session_start();
 if (!isset( $_SESSION['username'] ) ){
 header("location:index.html");
@@ -8,14 +7,11 @@ header("location:index.html");
 ?>
 
 <!DOCTYPE html>
-
 <html>
     <head>
         <!-- The comment page of the Scripto blog application -->
         <title>	Scripto Blog application </title>
-    
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        
         <!-- Link to css style file -->
         <link type="text/css" rel="stylesheet" href="CommentAdmin5.css" />
 	    <meta charset="utf-8">  
@@ -36,11 +32,8 @@ header("location:index.html");
         var titel_blog= document.bloginput.title.value;
         var username = "<?php echo $_SESSION['username'] ?>";
         if ( $.inArray(titel_blog, listofblockedtitles) > -1 ) {
-        alert("Not possible to comment on the selected blog");    
+            alert("Not possible to comment on the selected blog");    
         }
-        //if(listofblockedtitles.indexOf(titel_blog) > -1){
-        //alert("Not possible to comment on the selected blog");    
-        //}
         else{
             var xhr = new XMLHttpRequest();  
             var value = "mycomment=" + comment + "&titel_blog=" + titel_blog + "&username=" + username;
@@ -73,8 +66,8 @@ header("location:index.html");
         xhr.onload = function (e) {
             if (xhr.readyState === xhr.DONE) {
                 if (xhr.status === 200) {
-                    // The reponse contains all blogs from the input category in the databse 
-                    // with author, title and blog (ordered by descending ID numbers)    
+                    // The reponse contains all comments from a blog in the databse 
+                    // with comment_id, username and comment (ordered by descending ID numbers)    
                     document.output.outputtext.value =
                     xhr.response;
                     console.log(xhr.responseText);
@@ -169,17 +162,12 @@ header("location:index.html");
               <div id="Outputbox">    
                 <div class="column">
                 <h1>Lees hier het laatste commentaar, wellicht van uw hand!</h1>
-                Titel van bijbehorende blog: <input type="titelblog" name="titelblog"><br><br>    
-                <!-- WORK IN PROGRESS
-                Titel van bijbehorende blog:<input name="blog" placeholder="Openingsblog" type="text" list="blogs" />
-                <datalist id="blogs">
-                  <option value="Commentaar">Commentaar</option>
-                </datalist><br><br> -->     
-                  <textarea name="outputtext" cols="90" rows="12">
-                  </textarea>
+                Titel van bijbehorende blog: <input type="titelblog" name="titelblog"><br><br>     
+                <textarea name="outputtext" cols="90" rows="12"></textarea>
                 <!-- Button to refresh the outputbox to include new posted blogs since page was loaded --> 
                 <input type="button" name="ververs" onClick="getblogcomments()" value="Ververs comments" /> 
                 <br><br>    
+                <!-- Remove comments or disable comment section -->
                 ID van te verwijderen comment:  <input name="comment_id" placeholder="id nummer comment" type="text" />    
                 <!-- Button to delete the comment with the selected id -->     
                 <input type="button" name="delete" onClick="deletecomment()" value="Verwijder comment" /><br><br>  

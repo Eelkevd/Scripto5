@@ -1,6 +1,5 @@
 <?php
-// Check if session is not registered, redirect back to main page.
-// Put this code in first line of web page.
+// Check if session is not registered, redirect back to login page.
 session_start();
 if (!isset( $_SESSION['username'] ) ){
 header("location:index.html");
@@ -8,7 +7,6 @@ header("location:index.html");
 ?>
 
 <!DOCTYPE html>
-
 <html>
     <head>
         <!-- The writing a blog page of the Scripto blog application -->
@@ -19,45 +17,7 @@ header("location:index.html");
 	    <meta charset="utf-8">    
      </head>
         
-    <script>       
-    // Add category to category list WORK IN PROGRESS
-    function submitcategory() {
-        var newcategory = document.bloginput.nieuwcategorie.value; 
-        var xhr = new XMLHttpRequest();  
-        var value = "mycategory=" + newcategory;
-        xhr.open('POST', "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php", true); 
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');  
-        console.log(value);
-        xhr.send(value);           
-    }
-        
-    // Get array of all available categories  WORK IN PROGRESS
-    function getcategories() {
-        var xhr = new XMLHttpRequest(); 
-        var categories = "categories";
-        var url = "http://wijzijncodegorilla.nl/jorik/Scripto5/Admin/Scripto5API.php?categories=" +categories;
-        xhr.open('GET', url, true); 
-        xhr.onload = function (e) {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    // The reponse contains all blogs in the databse with author, 
-                    // title and blog and is ordered by descending ID numbers
-                    var allcategories = xhr.response;
-                    //return allcategories;
-                    //var allcat = allcategories.split("  ");
-                    //document.bloginput.text.value =
-                    //xhr.response; 
-                    console.log(xhr.response);
-                    console.log(allcategories);} 
-                else {
-                    console.error(xhr.statusText);}}
-        }; 
-        xhr.onerror = function (e) {
-              console.error(xhr.statusText);
-        };
-        xhr.send(null);   
-    }    
-        
+    <script>              
     // Send written blog message to database 
     function submitmessage() {
         var author = document.bloginput.author.value; 
@@ -149,6 +109,7 @@ header("location:index.html");
                 <option style="display:none;" value="" selected disabled hidden>Kies categorie</option>
                 </select>
                 <script>   
+                // Select first category
                 var select = document.getElementById("categories");  
                 select.options[select.options.length] = new Option('vurige verhalen', 'vuur');
                 select.options[select.options.length] = new Option('kabbelende verhalen', 'water');
@@ -162,28 +123,15 @@ header("location:index.html");
                 <select id="extracategories">
                 <option style="display:none;" value="" selected disabled hidden>Kies 2de categorie</option> 
                 </select>  
-                <script>   
+                <script> 
+                // Select optional second category
                 var select = document.getElementById("extracategories");
                 select.options[select.options.length] = new Option('vurige verhalen', 'vuur');
                 select.options[select.options.length] = new Option('kabbelende verhalen', 'water');
                 select.options[select.options.length] = new Option('aardige verhalen', 'aarde');
                 select.options[select.options.length] = new Option('luchtige verhalen', 'lucht');
                 select.options[select.options.length] = new Option('Informatie over de blog', 'Bloginfo');
-                </script> 
-                <br><br>      
-                  
-                <!-- WORK IN PROGRESS
-                //getcategories();   
-                //console.log(allcategories);
-                //var allcat = allcategories.split("  "); 
-                //for(index in allcat){
-                //     select.options[select.options.length] = new Option(allcat[index], index);
-                //} -->   
-             
-                <!-- WORK IN PROGRESS  
-                Zelf categorie aanmaken: <input type="text" name="nieuwcategorie">
-                <input type="button" name="categorietoevoegen" onClick="submitcategory();" value="Voeg categorie toe aan lijst" /><br><br> -->  
-  
+                </script><br><br>      
                 Tekst: <textarea id="text" name="text" rows="20" cols="90"></textarea>
                 <!-- Button to submit the new written blog to the database -->
                 <input type="button" name="publiceer" onClick="submitmessage();" value="Publiceer" /><br><br>  

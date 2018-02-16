@@ -1,8 +1,6 @@
 /* CSS Document Blog application Scripto*/
 
 /* basic elements */
-
-
 body {
     background="achtergrond.jpg">  
 	padding: 35px;
@@ -27,15 +25,13 @@ h1 {
 
 #menu { padding:12.5px 25px 12.5px 25px; }
 
-/* Locatie welkomtekst */
+/* Location Welcometext */
 .welcome { 
-    /*float:center;*/
     background-color: rgb(224, 224, 224);
     padding: 20px;
     text-align: center;
 }
 
-/* Create three equal columns that floats next to each other */
 .column {
     float: left;
     width: 100%;
@@ -52,16 +48,13 @@ h1 {
     height:95%;
     width:95%;
     border:1px solid rgb(0, 0, 0);
-    overflow:auto;
-    /*float:center;*/ }  
+    overflow:auto; }  
 
 input[type=submit] {
    	background-color:rgb(255, 255, 255);
 	font-size:16px;
 	}
 }
-
-
 
 /* Style the top navigation bar */
 .topnav {

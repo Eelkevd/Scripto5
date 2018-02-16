@@ -1,6 +1,5 @@
 <?php
-// Check if session is not registered, redirect back to main page.
-// Put this code in first line of web page.
+// Check if session is not registered, redirect back to Login page.
 session_start();
 if (!isset( $_SESSION['username'] ) ){
 header("location:index.html");
@@ -8,7 +7,6 @@ header("location:index.html");
 ?>
 
 <!DOCTYPE html>
-
 <html>
     <head>
         <!-- The correction page of the Scripto blog application -->
@@ -26,6 +24,7 @@ header("location:index.html");
      </head>
         
     <script>     
+    // Get old blog that the admin wants to correct/improve
     function getblogtocorrect(){
         var xhr = new XMLHttpRequest();  
         var correctblog =document.output.verbeterblog.value;   
@@ -34,8 +33,7 @@ header("location:index.html");
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    // The reponse contains all blogs in the databse with author, 
-                    // title and blog and is ordered by descending ID numbers
+                    // The reponse contains the old blog from the databse
                     document.output.correctblogarea.value =
                     xhr.response; 
                     console.log(xhr.response);
@@ -51,6 +49,7 @@ header("location:index.html");
         xhr.send(null);  
     }   
         
+    // Send the corrected/improved blog back to the database to replace the old blog    
     function correctblog(){
         var xhr = new XMLHttpRequest();  
         var improvedblog = document.output.correctblogarea.value;
@@ -97,6 +96,7 @@ header("location:index.html");
                   <input type="button" name="getoldblog" onClick="getblogtocorrect()" value="Roep oude blog op" /><br><br>  
                   <textarea name="correctblogarea" cols="90" rows="20">
                   </textarea><br>
+                  <!-- Button to send corrected blog back to database to replace old blog -->
                   <input type="button" name="sendnewblog" onClick="correctblog()" value="Verstuur verbeterde blog" /><br><br>      
                 </div>
               </div> 
