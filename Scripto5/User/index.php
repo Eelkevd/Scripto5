@@ -1,3 +1,43 @@
+    <!-- Send email with link to passwordchange page to emailaddres -->
+    <?php
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+    require 'PHPMailer/src/Exception.php';
+    require 'PHPMailer/src/PHPMailer.php';
+    require 'PHPMailer/src/SMTP.php';
+
+    if(isset($_POST['submit'])){
+    $mail = new PHPMailer(true);                          // Passing `true` enables exceptions
+    try {
+    //Server settings
+    $mail->SMTPDebug = 0;                                 // Enable verbose debug output
+    $mail->isSMTP();                                      // Set mailer to use SMTP
+    $mail->Host = 'smtp.mailtrap.io';                     // Specify main and backup SMTP servers
+    $mail->SMTPAuth = true;                               // Enable SMTP authentication
+    $mail->Username = 'd44d8cda93df30';                   // SMTP username
+    $mail->Password = '2ff93d1c83e61b';                  // SMTP password
+    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+    $mail->Port = 465;                                    // TCP port to connect to
+
+    //Recipients
+    $mail->setFrom('hapieshapies@gmail.com', 'Mailer');
+    $mail->addAddress('JdeB112154@gmail.com', 'User');     // Add a recipient
+
+    //Content
+    $mail->isHTML(true);                                  // Set email format to HTML
+    $mail->Subject = 'New password link Scripto';
+    $mail->Body    = 'The link to make a new password: http://localhost/Scripto5/User/Newpassword.html';
+    $mail->AltBody = 'The link to make a new password: http://localhost/Scripto5/User/Newpassword.html';
+
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+}
+    }
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,7 +47,7 @@
         <link type="text/css" rel="stylesheet" href="index.css" />
 	    <meta charset="utf-8">    
      </head>
-    
+        
     <!-- Insert background with clouds -->
     <body background="achtergrond.jpg"> 
       <!--Build-up of submit page -->
@@ -65,8 +105,8 @@
              <form name="emailinput" action="" method="post">  
                 Jouw email: <input type="text" name="email"><br>
                 <!-- Button to send password change link to mail -->
-                <input type="button" name="mail" onClick="submitmail();" value="Vraag wachtwoord aan" />
-             </form><br><br> 
+             <input type="submit" name="submit" value="Vraag wachtwoord aan">
+             </form><br><br>
             
         </div>
       </div>  
