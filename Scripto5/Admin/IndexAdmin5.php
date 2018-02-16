@@ -1,6 +1,5 @@
 <?php
-// Check if session is not registered, redirect back to main page.
-// Put this code in first line of web page.
+// Check if session is not registered, redirect back to login page.
 session_start();
 if (!isset( $_SESSION['username'] ) ){
 header("location:index.html");
@@ -8,7 +7,6 @@ header("location:index.html");
 ?>
 
 <!DOCTYPE html>
-
 <html>
     <head>
         <!-- The overview page of the Scripto blog application -->
@@ -64,7 +62,7 @@ header("location:index.html");
                 <p class="welcome"> <b> Scripto: jouw blog applicatie, jouw geschriften! </b></p>
                 <div style="clear:both"></div>  
             </div>     
-
+            
             <!-- Navigation bar links -->
             <div class="topnav">
                 <a href="IndexAdmin5.php">Blogs</a>

@@ -1,25 +1,26 @@
 <?php
+    // API Page to provide all POST and GET requests to database
     // Give permission for used request methods
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: *");
 
     $verb = $_SERVER['REQUEST_METHOD'];
 
-    //Global variable
+    //Global variables
     $blogs_numbers = array();
     $GLOBALS['servername'] = "localhost";
     $GLOBALS['password'] = "";
     $GLOBALS['dbname'] = "scripto5";
     $GLOBALS['username'] = "root";
 
+    // All POST requests
     if ($verb == 'POST'){
         
-        //Check if there is a new account to put in database
+        // Check if there is a new account to put in database
         if (isset( $_POST["userid"] )){
                 $postuserid = $_POST["userid"];
                 $postpassword = $_POST["pasw"];
                 $postemail = $_POST["email"]; 
-                
                 // Translation to make blogs with ' in the text possible
                 $userid = str_replace("'", "''", "$postuserid");
                 $email = str_replace("'", "''", "$postemail");
@@ -41,8 +42,9 @@
                 $conn->close();     
         }
         
-        // check if there is a new password to replace the old one
+        // Check if there is a new password to replace the old one
         elseif (isset( $_POST["newpasw"] )){
+            
                 $pasw = $_POST["newpasw"];
                 $passw = password_hash($pasw, PASSWORD_DEFAULT);
                 $email = $_POST["email"];
@@ -66,18 +68,15 @@
                 $posttext = $_POST["mycomment"];
                 $posttitle = $_POST["titel_blog"];
                 $postusername = $_POST["username"];
-                
                 // Translation to make blogs with ' in the text possible
                 $text = str_replace("'", "''", "$posttext");
                 $title = str_replace("'", "''", "$posttitle");
                 $userid = str_replace("'", "''", "$postusername");
-            
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                    
+                    die("Connection failed: " . $conn->connect_error);}   
                 // Insert blog into blog database
                 $sql = "INSERT INTO comments (comment, titel_blog, Username)".
                 "VALUES ('$text', '$title', '$userid')";
@@ -93,20 +92,18 @@
         }
     }
     
-    // Code to put blogs from the database to the webpage
+    // All GET requests
     if ($verb == 'GET'){
         
         // Get blogs from certain category!
         if (isset( $_GET["category"] )){
 
                 $category = $_GET["category"];
-            
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);}
-            
                 // Get category_id
                 $sql = "SELECT category_id FROM categories WHERE category = '$category'";
                 $result = $conn->query($sql);
@@ -130,7 +127,6 @@
                     array_push($blogs_numbers, "$blog_number");
                     }
                 }    
-
                 // Get blogs with the blog_id's based on the category_id  
                 $length = count($blogs_numbers);
                 //print_r($blogs_numbers);
@@ -150,7 +146,7 @@
                 $conn->close(); 
         }
         
-         // Get results for search!
+        // Get results for search!
         elseif (isset( $_GET["search"] )){
             
                 // Create connection
@@ -175,28 +171,9 @@
                 $conn->close();     
         }
         
-        // Get all available category names!
-        elseif (isset( $_GET["categories"] )){
-                 // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get categories
-                $sql = "SELECT category FROM categories";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {      
-                    echo "" . $row["category"]. "  " ;
-                    }   
-                }
-                else {
-                    echo "0 results";
-                }  
-                $conn->close(); 
-        }
-        
+        // Get password coupled with users email
         elseif (isset( $_GET["email"] )){
+            
                 $email = $_GET["email"];
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
@@ -217,10 +194,10 @@
                 }  
                 $conn->close();     
         }
-             
-        // Check if there is a blog title selection in the request: 
-        // get comments for certain blog!
+              
+        // Get comments for certain blog!
         elseif (isset( $_GET["titel_blog"] )){
+            
                 $titel_blog = $_GET["titel_blog"];
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
@@ -235,28 +212,6 @@
                     echo "Comment_ID: " . $row["comment_id"]. "\r\n"; 
                     echo "Username: " . $row["Username"]. "\r\n" ;
                     echo "Comment: " . $row["comment"]. "\r\n" ;
-                    }
-                }
-                else {
-                    echo "0 results";
-                }
-                $conn->close();
-        }
-        
-        // Check if there is the all_blogs keyword in the request: 
-        elseif (isset( $_GET["all_blogs"] )){
-                
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get category_id
-                $sql = "SELECT titel_blog FROM blogs";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    echo "Titel blog: " . $row["titel_blog"]. " , "; 
                     }
                 }
                 else {

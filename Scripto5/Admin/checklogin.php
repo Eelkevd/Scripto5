@@ -1,4 +1,5 @@
 <?php
+// Check login input from admin, start session
 $host="localhost"; // Host name
 $username="root"; // Mysql username
 $password=""; // Mysql password
@@ -8,16 +9,11 @@ $tbl_name="login"; // Table name
 // Connect to server and select databse.
 $link = mysqli_connect("$host", "$username", "$password", "$db_name")or die("cannot connect");
 
-// username and password sent from form
+// Username and password sent from form
 $myusername=$_POST['myusername'];
 $mypassword=$_POST['mypassword'];
 
-// To protect MySQL injection (more detail about MySQL injection)
-//$myusername = stripslashes($myusername);
-//$mypassword = stripslashes($mypassword);
-//$myusername = mysql_real_escape_string($myusername);
-//$mypassword = mysql_real_escape_string($mypassword);
-
+// Get username and password from database
 $sql="SELECT * FROM $tbl_name WHERE username='$myusername' and password='$mypassword'";
 $result=mysqli_query($link, $sql);
 
@@ -26,13 +22,13 @@ $count=mysqli_num_rows($result);
 
 // If result matched $myusername and $mypassword, table row must be 1 row
 if($count==1){   
-// Register $myusername, $mypassword and redirect to file "IndexAdmin5.php"
-session_start();    
-$_SESSION["username"] = $myusername;
-//session_register("mypassword");
-header("location:IndexAdmin5.php");
+    // Register $myusername, $mypassword and redirect to file "IndexAdmin5.php"
+    session_start();    
+    $_SESSION["username"] = $myusername;
+    //session_register("mypassword");
+    header("location:IndexAdmin5.php");
 }
 else {
-echo "Wrong Username or Password";
+    echo "Wrong Username or Password";
 }
 ?>

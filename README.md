@@ -7,13 +7,16 @@ An additional version to the previous Scripto blog application of last week (See
 ## Follow the progression: https://trello.com/b/cTIGhmDP/scripto-blog-week-5
 
 ## Description of the application
+On the startpage index.html people can choose to login as user "lezer" or as admin "blogger". 
+As a user you can read blogs (IndexUser5.html), see blogs per category (CategoryUSer5.html), search for a blog with a search term (SearchUser5.html). To place a comment as user, the user has to login (user/index.html) or is able to first make a new account (RegisterUser5.html). If the users login in succesfully (checklogin.php), the users are able to comment on blogs (Commentuser5.php) or logout (logout.php). 
+As an admin you first have to login (admin/index.html) and get permission (checklogin.php) to get access to the same functionalities as the user (IndexAdmin5.php, CategoryAdmin5.php, SearchAdmin5.php, Commentadmin5.php, logout.php) plus the functionality to write blogs (ScriptoAdmin5.php), improve or correct a previous written blog (ImproveblogAdmin5.php) and to delete comments or disable the comment section (also CommentAdmin5.php). 
 
 ### Workflow
 - monday: reading assignment, W5-001 searchfunction made, found information about login screen, made new database, made new Git repository
 - tuesday: W5-003 able to improve old blog article, first online demo working, php login struggles
 - wednesday: W5-002 create login for admin, new database table, W5-004 create login for user, new database table, second online demo working
 - thursday: W5-005 user able to make new username & password, removed bugs (from online demo), W5-006 passwords now encrypted, new online demo version
-- friday
+- friday: Improved readability code
 
 ## Look for the latest online demo at: http://wijzijncodegorilla.nl/jorik/Scripto5/
 

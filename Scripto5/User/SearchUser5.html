@@ -4,7 +4,6 @@
     <head>
         <!-- The search page of the Scripto blog application -->
         <title>	Scripto Blog application </title>
-        
         <!-- Link to css style file -->
         <link type="text/css" rel="stylesheet" href="IndexUser5.css" />
 	    <meta charset="utf-8">
@@ -16,8 +15,9 @@
         </style>   
      </head>
         
-    <script>     
-        function getsearchresults() {
+    <script>    
+    // Get all blogs with the search input 
+    function getsearchresults() {
         var xhr = new XMLHttpRequest();  
         var search =document.output.zoekwoord.value;   
         var url = "http://localhost/Scripto5/user/ScriptoUserAPI5.php?search="+search;    
@@ -25,8 +25,7 @@
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    // The reponse contains all blogs in the databse with author, 
-                    // title and blog and is ordered by descending ID numbers
+                    // The reponse contains all blogs in the databse with search term
                     document.output.outputtext.value =
                     xhr.response; 
                     console.log(xhr.response);
@@ -71,8 +70,7 @@
                   Zoekwoord:  <input name="zoekwoord" placeholder="zoekwoord" type="text" />    
                   <!-- Button to search into database -->     
                   <input type="button" name="search" onClick="getsearchresults()" value="Zoek blog" /><br><br>  
-                  <textarea name="outputtext" cols="90" rows="20">
-                  </textarea><br>
+                  <textarea name="outputtext" cols="90" rows="20"></textarea><br>
                 </div>
               </div> 
             </form>

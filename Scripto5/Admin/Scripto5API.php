@@ -1,19 +1,19 @@
 <?php
-
+    // API Page to provide all POST and GET requests to database
     // Give permission for used request methods
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: *");
 
     $verb = $_SERVER['REQUEST_METHOD'];
 
-    //Global variable
+    //Global variables
     $blogs_numbers = array();
     $GLOBALS['servername'] = "localhost";
     $GLOBALS['password'] = "";
     $GLOBALS['dbname'] = "scripto5";
     $GLOBALS['username'] = "root";
     
-    // Code to delete comments
+    // All POST requests
     if ($verb == 'POST'){
         
         // Check if there is a comment_id to remove comment
@@ -27,7 +27,6 @@
                     die("Connection failed: " . $conn->connect_error);}
                 // Delete comment from comment database
                 $sql = "DELETE FROM comments WHERE comment_id = '$comment_id'";
-           
                 // Check if comment has been deleted
                 if ($conn->query($sql) === TRUE) {
                     echo "Record deleted successfully";
@@ -39,7 +38,7 @@
 
         // Check if there is a blog to put in the database
         elseif (isset( $_POST["myblog"] )){
-            
+    
                 $posttext = $_POST["myblog"];
                 $posttitle = $_POST["title"];
                 $postauthor = $_POST["author"];
@@ -59,8 +58,7 @@
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                    
+                    die("Connection failed: " . $conn->connect_error);}    
                 // Insert blog into blog database
                 $sql = "INSERT INTO blogs (titel_blog, auteur, tekst)".
                 "VALUES ('$title', '$author', '$text')";
@@ -68,8 +66,7 @@
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";} 
                 else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;}
-                    
+                    echo "Error: " . $sql . "<br>" . $conn->error;}    
                 // Insert category if category is absent in category database
                 $sql = "SELECT category FROM categories WHERE category = '$category'";
                 $result = $conn->query($sql);
@@ -182,25 +179,24 @@
                     echo "Error: " . $sql . "<br>" . $conn->error;}       
                 $conn->close(); 
         }
+        
         else {
                 die("Error: the required parameters are missing.");    
         }
     }
     
-    // Code to put blogs from the database to the webpage
+    // All GET requests
     if ($verb == 'GET'){
         
         // Get blogs from certain category!
         if (isset( $_GET["category"] )){
 
                 $category = $_GET["category"];
-            
                 // Create connection
                 $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
                 // Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);}
-            
                 // Get category_id
                 $sql = "SELECT category_id FROM categories WHERE category = '$category'";
                 $result = $conn->query($sql);
@@ -224,7 +220,6 @@
                     array_push($blogs_numbers, "$blog_number");
                     }
                 }    
-
                 // Get blogs with the blog_id's based on the category_id  
                 $length = count($blogs_numbers);
                 //print_r($blogs_numbers);
@@ -244,7 +239,7 @@
                 $conn->close(); 
         }
         
-         // Get results for search!
+        // Get all results for search!
         elseif (isset( $_GET["search"] )){
             
                 // Create connection
@@ -293,30 +288,7 @@
                 $conn->close();     
         }
         
-        // Get all available category names!
-        elseif (isset( $_GET["categories"] )){
-
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get categories
-                $sql = "SELECT category FROM categories";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    echo "" . $row["category"]. "  " ;
-                    }   
-                }
-                else {
-                    echo "0 results";
-                }  
-                $conn->close(); 
-        }
-        
-        // Check if there is a blog titel selection in the request: 
-        // get comments for certain blog!
+        // Get comments for certain blog!
         elseif (isset( $_GET["titel_blog"] )){
  
                 $titel_blog = $_GET["titel_blog"];
@@ -333,28 +305,6 @@
                     echo "Comment_ID: " . $row["comment_id"]. "\r\n"; 
                     echo "Username: " . $row["Username"]. "\r\n" ;
                     echo "Comment: " . $row["comment"]. "\r\n" ;
-                    }
-                }
-                else {
-                    echo "0 results";
-                }
-                $conn->close();
-        }
-        
-        // Check if there is the all_blogs keyword in the request: 
-        elseif (isset( $_GET["all_blogs"] )){
-                
-                // Create connection
-                $conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
-                // Get category_id
-                $sql = "SELECT titel_blog FROM blogs";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    while($row = $result->fetch_assoc()) {    
-                    echo "Titel blog: " . $row["titel_blog"]. " , "; 
                     }
                 }
                 else {
@@ -386,6 +336,5 @@
                 }
                 $conn->close();
         }
-    }
-    
+    }  
 ?>

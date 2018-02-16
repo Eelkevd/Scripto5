@@ -1,6 +1,5 @@
 <?php
-// Check if session is not registered, redirect back to main page.
-// Put this code in first line of web page.
+// Check if session is not registered, redirect back to login page.
 session_start();
 if (!isset( $_SESSION['username'] ) ){
 header("location:index.html");
@@ -13,7 +12,6 @@ header("location:index.html");
     <head>
         <!-- The search page of the Scripto blog application -->
         <title>	Scripto Blog application </title>
-        
         <!-- Link to css style file -->
         <link type="text/css" rel="stylesheet" href="IndexAdmin5.css" />
 	    <meta charset="utf-8">
@@ -26,7 +24,8 @@ header("location:index.html");
      </head>
         
     <script>     
-        function getsearchresults() {
+    // Get all blogs based on the search term
+    function getsearchresults() {
         var xhr = new XMLHttpRequest();  
         var search =document.output.zoekwoord.value;   
         var url = "http://localhost/Scripto5/Admin/Scripto5API.php?search="+search;    
@@ -34,8 +33,7 @@ header("location:index.html");
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    // The reponse contains all blogs in the databse with author, 
-                    // title and blog and is ordered by descending ID numbers
+                    // The reponse contains all blogs in the databse with the search term
                     document.output.outputtext.value =
                     xhr.response; 
                     console.log(xhr.response);
