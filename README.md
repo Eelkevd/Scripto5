@@ -10,7 +10,11 @@ An additional version to the previous Scripto blog application of last week (See
 On the startpage index.html people can choose to login as user "lezer" or as admin "blogger". 
 As a user you can read blogs (IndexUser5.html), see blogs per category (CategoryUSer5.html), search for a blog with a search term (SearchUser5.html). To place a comment as user, the user has to login (user/index.html) or is able to first make a new account (RegisterUser5.html). If the users login in succesfully (checklogin.php), the users are able to comment on blogs (Commentuser5.php) or logout (logout.php). A user can ask to change its password with a link in the mail. The sending process of the mail has problems, but the link to change the password works: http://wijzijncodegorilla.nl/jorik/Scripto5/User/Newpassword.html
 
+As user you can make your own username and password to test this part of the application.
+
 As an admin you first have to login (admin/index.html) and get permission (checklogin.php) to get access to the same functionalities as the user (IndexAdmin5.php, CategoryAdmin5.php, SearchAdmin5.php, Commentadmin5.php, logout.php) plus the functionality to write blogs (ScriptoAdmin5.php), improve or correct a previous written blog (ImproveblogAdmin5.php) and to delete comments or disable the comment section (also CommentAdmin5.php). 
+
+To test the admin side of the application to make for example a blog, use the username "Jorik" and the password "IloveJorik".
 
 ### Workflow
 - monday: reading assignment, W5-001 searchfunction made, found information about login screen, made new database, made new Git repository
@@ -70,10 +74,8 @@ The Userstories of the CodeGorilla assignment for week 5 (in Dutch):
 - W5-003
 - W5-004
 - W5-005
-- w5-006
-- w5-007 (Note: did work with mailtrap SMTP server, not with wijzijncodegorilla.nl server. The link that should be given in the mail is http://wijzijncodegorilla.nl/jorik/Scripto5/User/Newpassword.html)
-
-### WORK IN PROGRESS
+- W5-006
+- W5-007 (Note: did work with mailtrap SMTP server, not with wijzijncodegorilla.nl server. The link that should be given in the mail is http://wijzijncodegorilla.nl/jorik/Scripto5/User/Newpassword.html)
 
 # Screenshots
 
